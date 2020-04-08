@@ -1,0 +1,49 @@
+#management:
+#  endpoints:
+##    web:
+##      exposure:
+##          include: "*"
+##  endpoint:
+##    health:
+##      show-details: always
+server:
+  port: 8888
+info:
+  groupId: @project.groupId@
+  artifactId: @project.artifactId@
+  version: @project.version@
+spring:
+  security:
+    # 登陆所需的账号密码
+    user:
+      name: admin
+      password: admin
+  application:
+    name: actuator
+  boot:
+    admin:
+      ui:
+        title: 服务监控中心
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    metadata-map:
+      user:
+        name: admin
+        password: admin
+  client:
+#    registry-fetch-interval-seconds: 5
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://localhost:3333/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

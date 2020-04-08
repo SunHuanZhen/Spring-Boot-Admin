@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <contextName>client</contextName>
+    <springProperty scope="context" name="logfile.home" source="app.logfile.home"/>
+
+    <!--appender 是负责写日志的组件，常用的组件有：ConsoleAppender、FileAppender、RollingFileAppender-->
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger{36}: %msg%n</pattern>
+            <!--<pattern>1-%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n</pattern>-->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 时间滚动输出 level为 warn 日志 -->
+    <!--RollingFileAppender：滚动记录文件日志组件，先将日志记录记录到指定文件，当符合某个条件时，将日志记录到其他文件-->
+    <appender name="WARNFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/work/logs/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--过滤级别-->
+            <level>WARN</level>
+        </filter>
+        <!--rollingPolicy滚动策略：当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--文件名模式：比如：/var/log/%d{yyyy/MM, aux}/myapplication.%d{yyyy-MM-dd}.log ，这里最重要的是 %d{}，用它来格式化一个时间日期，作为一个文件名。-->
+            <FileNamePattern>/work/logs/error.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+            <!--控制文件的最大数量，超过数量则删除旧文件-->
+            <MaxHistory>365</MaxHistory>
+            <!--限制日志文件大小，超出之后会先删除较旧的日志-->
+            <totalSizeCap>10GB</totalSizeCap>
+            <!--基于时间的文件命名和触发策略-->
+            <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 单个日志文件size上限 --><!--日志文件超过MaxFileSize就再起一个新的-->
+                <MaxFileSize>100MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!--格式化-->
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger{36}: %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 时间滚动输出 level为 INFO 日志 -->
+    <appender name="INFOFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/work/logs/debug.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 非当天的日志文件压缩备份为.gz -->
+            <FileNamePattern>/work/logs/debug.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+            <MaxHistory>365</MaxHistory>
+            <!-- 日志文件总和size上限 -->
+            <totalSizeCap>30GB</totalSizeCap>
+            <!-- 单个日志文件size上限 -->
+            <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>100MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger{36}: %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--root是log的最高级（root 也是 logger 元素，但它是根 logger。只有一个 level 系统的日志级别属性）-->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="WARNFILE" />
+        <appender-ref ref="INFOFILE" />
+    </root>
+
+</configuration>

@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: eureka
+  boot:
+    admin:
+      client:
+        url: http://localhost:8888
+        username: admin
+        password: admin
+server:
+  port: 3333
+#eureka:
+#  instance:
+#    hostname: localhost
+#    status-page-url: http://localhost:${server.port}/swagger-ui.html
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:1111/eureka/
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: http://localhost:${server.port}/eureka/
+#spring:
+#  boot:
+#    admin:
+#      client:
+#        url: http://localhost:8888
+#        username: admin
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#        password: admin
